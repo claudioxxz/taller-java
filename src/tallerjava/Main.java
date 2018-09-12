@@ -5,6 +5,8 @@
  */
 package tallerjava;
 
+import tallerjava.vistas.VistaIngreso;
+
 /**
  *
  * @author ElPCdeClaudio
@@ -15,6 +17,7 @@ public class Main {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
+        VistaIngreso vistaIngreso = new VistaIngreso();
     }
     
 }

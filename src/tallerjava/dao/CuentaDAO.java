@@ -48,6 +48,17 @@ public class CuentaDAO {
         return listaCuenta;
     }
     
+    
+    public List<Cuenta> obtenerCuentasPorUsuario(int usuarioId) throws SQLException{
+        ArrayList<Cuenta> listaCuenta = new ArrayList<>();
+        ResultSet rs = st.executeQuery("Select * from cuenta where usuario_id ="+usuarioId);
+        while(rs.next()){
+            final Cuenta cuenta = new Cuenta(rs.getInt(1), rs.getString(2), rs.getDouble(3));
+            listaCuenta.add(cuenta);
+        }
+        return listaCuenta;
+    }
+    
     public Cuenta obtenerCuentaPorId(int id) throws SQLException{        
         ResultSet rs;
         rs = st.executeQuery("Select * from cuenta where id=" + id);

@@ -26,6 +26,18 @@ public class UsuarioDao {
          st = con.getConnection().createStatement();
     }
     
+    public boolean verificarUsuario(Usuario usuario) throws SQLException{
+        List<Usuario> listaUsuarios = obtenerTodos();
+        
+        for(Usuario u: listaUsuarios){
+            if(u.equals(usuario)){
+                usuario.setId(u.getId());
+                return true;
+            }
+        }
+        return false;
+    }
+    
     public boolean insertar(Usuario usuario) throws SQLException{
         String sql = String.format("insert into usuario (rut, contraseña) values('%s', '%s')", usuario.getRut(), usuario.getContraseña());
         int i = st.executeUpdate(sql);

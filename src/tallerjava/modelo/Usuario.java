@@ -5,6 +5,8 @@
  */
 package tallerjava.modelo;
 
+import java.util.Objects;
+
 /**
  *
  * @author Javier Ortiz
@@ -48,6 +50,28 @@ public class Usuario {
     public void setContraseña(String contraseña) {
         this.contraseña = contraseña;
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Usuario other = (Usuario) obj;
+        if (!Objects.equals(this.rut, other.rut)) {
+            return false;
+        }
+        if (!Objects.equals(this.contraseña, other.contraseña)) {
+            return false;
+        }
+        return true;
+    }
+    
     
     
 }
