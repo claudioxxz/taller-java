@@ -18,6 +18,11 @@ public class Cuenta {
         this.tipo = tipo;
         this.saldo = saldo;
     }
+    
+    public Cuenta(int id, String tipo, double saldo) {
+        this.tipo = tipo;
+        this.saldo = saldo;
+    }
 
     public int getId() {
         return id;
