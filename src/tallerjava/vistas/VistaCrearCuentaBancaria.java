@@ -77,7 +77,6 @@ public class VistaCrearCuentaBancaria extends JDialog{
         pack();
         setVisible(true);
         setTitle("Crear cuenta bancaria");
-        setModal(true);
         
     }
     

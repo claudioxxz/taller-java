@@ -10,6 +10,7 @@ import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.SQLException;
+import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
@@ -19,9 +20,7 @@ import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 import tallerjava.dao.UsuarioDao;
-import tallerjava.dao.UsuarioDetalleDao;
 import tallerjava.modelo.Usuario;
-import tallerjava.modelo.UsuarioDetalle;
 
 /**
  *
@@ -29,11 +28,11 @@ import tallerjava.modelo.UsuarioDetalle;
  */
 public class Registrar extends JDialog implements ActionListener{
     
-    private JLabel labelNombre, labelApellido, labelEmail, labelRut, labelContraseña, labelConfirmar;
-    private JTextField textNombre, textApellido, textEmail, textRut;
+    private JLabel labelRut, labelContraseña, labelConfirmar;
+    private JTextField textRut;
     private JPasswordField passContrasena, passConfirmar;
     private JButton btnCrearUsuario, btnCancelar;
-    private JPanel panNombreApellido, panEmailRut, panContrasena, panBotones;
+    private JPanel panEmailRut, panBotones;
     
     private static final String EMAIL_PATTERN = 
     "^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@"
@@ -50,119 +49,86 @@ public class Registrar extends JDialog implements ActionListener{
         btnCrearUsuario.addActionListener(this);
         btnCancelar.addActionListener(this);
         setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-        pack();
-        setSize(600, 400);
         setVisible(true);
         setTitle("Registrar");
-        setModal(true);
+        pack();
     }
     
     
     @Override
     public void actionPerformed(ActionEvent e) {
         if(btnCrearUsuario == e.getSource()){
-            if(String.valueOf(passContrasena.getPassword()).equals(String.valueOf(passConfirmar.getPassword()))){
-                boolean textFieldState = estaVacio();
-                if(textFieldState == true){
-                    if(textEmail.getText().matches(EMAIL_PATTERN)){
-                        Usuario usuario = new Usuario(textRut.getText(), String.valueOf(passContrasena.getPassword()));
-                        try{
-                            UsuarioDao db = new UsuarioDao();
-                            boolean resultado = db.insertar(usuario);
-                            if(resultado){
-                                int id = db.idUltimaInsercion();
-                                UsuarioDetalle detalle = new UsuarioDetalle(id, textNombre.getText(), textApellido.getText(), textEmail.getText());
-                                UsuarioDetalleDao uddb = new UsuarioDetalleDao();
-                                resultado = uddb.insertar(detalle);
-                                if(resultado){
-                                    JOptionPane.showMessageDialog(null, "Usuario creado correctamente");
-                                    limpiar();
-                                }
-                            }
-                        }catch(SQLException error){
-                            JOptionPane.showMessageDialog(null, "error al crear usuario");
-                            System.out.println(error.getMessage());
-                        }
-                    }
-                    else{
-                        JOptionPane.showMessageDialog(null, "El Email esta en un formato incorrecto");
-                        textEmail.requestFocus();
-                    }
-                }
-                else{
-                    JOptionPane.showMessageDialog(null, "Debe rellenar todos los campos para crear un usuario");
-                    textNombre.requestFocus();
-                }
-            }else{
-                JOptionPane.showMessageDialog(null, "Las contraseñas ingresadas deben ser iguales");
+            if(!validarPass()){
+                JOptionPane.showMessageDialog(this, "Las contraseñas ingresadas deben ser iguales");
                 passContrasena.setText("");
                 passConfirmar.setText("");
                 passContrasena.requestFocus();
+                return;
+            }
+            if(estaVacio()){
+                JOptionPane.showMessageDialog(this, "Debe rellenar todos los campos para crear un usuario");
+                textRut.requestFocus();
+                return;
+            }
+            
+            Usuario usuario = new Usuario(textRut.getText(), String.valueOf(passContrasena.getPassword()));
+            try{
+                UsuarioDao db = new UsuarioDao();
+                boolean resultado = db.insertar(usuario);
+                if(resultado){
+                    JOptionPane.showMessageDialog(this, "Usuario creado correctamente");
+                    limpiar();
+                }
+            }catch(SQLException error){
+                JOptionPane.showMessageDialog(this, "error al crear usuario");
+                System.out.println(error.getMessage());
             }
         }
         if(btnCancelar == e.getSource()){
             limpiar();
         }
     }
+    
+    public boolean validarPass(){
+        return String.valueOf(passContrasena.getPassword()).equals(String.valueOf(passConfirmar.getPassword()));
+    }
         
     public void limpiar(){
-        textNombre.setText("");
-        textApellido.setText("");
-        textEmail.setText("");
         textRut.setText("");
         passContrasena.setText("");
         passConfirmar.setText("");
-        textNombre.requestFocus();
+        textRut.requestFocus();
     }
     
     private boolean estaVacio(){
-        boolean resultado = false;
-        if(textNombre.getText().isEmpty() && textApellido.getText().isEmpty() && textEmail.getText().isEmpty() && textRut.getText().isEmpty() 
-                && String.valueOf(passContrasena.getPassword()).isEmpty() && String.valueOf(passConfirmar.getPassword()).isEmpty()){
-            resultado = false;
-        }else{
-            resultado = true;
-        }
-        return resultado;
+        return textRut.getText().isEmpty() 
+                && String.valueOf(passContrasena.getPassword()).isEmpty() 
+                && String.valueOf(passConfirmar.getPassword()).isEmpty();
     }
     
     private void setGridLayout(){
         setLayout(new GridLayout(4, 1));
-        add(panNombreApellido);
+        getContentPane().setLayout(new FlowLayout(FlowLayout.CENTER, 50, 50));
         add(panEmailRut);
-        add(panContrasena);
-        add(panBotones);
     }
     private void setLayouts(){
-        panNombreApellido.setLayout(new FlowLayout(FlowLayout.LEADING, 45, 10));
-        panNombreApellido.add(labelNombre);
-        panNombreApellido.add(textNombre);
-        panNombreApellido.add(labelApellido);
-        panNombreApellido.add(textApellido);
-        panEmailRut.setLayout(new FlowLayout(FlowLayout.LEADING, 50, 10));
-        panEmailRut.add(labelEmail);
-        panEmailRut.add(textEmail);
+        panEmailRut.setLayout(new BoxLayout(panEmailRut,BoxLayout.Y_AXIS));
         panEmailRut.add(labelRut);
         panEmailRut.add(textRut);
-        panContrasena.setLayout(new FlowLayout(FlowLayout.LEADING, 40, 10));
-        panContrasena.add(labelContraseña);
-        panContrasena.add(passContrasena);
-        panContrasena.add(labelConfirmar);
-        panContrasena.add(passConfirmar);
-        panBotones.setLayout(new FlowLayout(FlowLayout.CENTER, 50, 10));
+        panEmailRut.add(labelContraseña);
+        panEmailRut.add(passContrasena);
+        panEmailRut.add(labelConfirmar);
+        panEmailRut.add(passConfirmar);
+                panEmailRut.add(panBotones);
+
+        panBotones.setLayout(new FlowLayout(FlowLayout.CENTER, 20, 20));
         panBotones.add(btnCrearUsuario);
-        panBotones.add(btnCancelar);        
+        panBotones.add(btnCancelar);      
     }
     private void setJTextFields(){
-        textNombre = new JTextField("", 10);
-        textApellido = new JTextField("", 10);
-        textEmail = new JTextField("", 10);
         textRut = new JTextField("", 10);
     }
     private void setJLabels(){
-        labelNombre = new JLabel("Nombre");
-        labelApellido = new JLabel("Apellido");
-        labelEmail = new JLabel("Email");
         labelRut = new JLabel("Rut");
         labelContraseña = new JLabel("Contraseña");
         labelConfirmar = new JLabel("Confirmar Contraseña");
@@ -176,9 +142,7 @@ public class Registrar extends JDialog implements ActionListener{
         btnCancelar = new JButton("Cancelar");
     }
     private void setJPanel(){
-        panNombreApellido = new JPanel();
         panEmailRut = new JPanel();
-        panContrasena = new JPanel();
         panBotones = new JPanel();
     }
 
