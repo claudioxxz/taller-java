@@ -12,10 +12,25 @@ package tallerjava.modelo;
 public class Usuario {
     private String rut;
     private String contraseña;
-
+    private int id;
+    
     public Usuario(String rut, String contraseña) {
         this.rut = rut;
         this.contraseña = contraseña;
+    }
+
+    public Usuario(int id, String rut, String contraseña) {
+        this.rut = rut;
+        this.contraseña = contraseña;
+        this.id = id;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getRut() {
