@@ -22,6 +22,7 @@ public class Cuenta {
     public Cuenta(int id, String tipo, double saldo) {
         this.tipo = tipo;
         this.saldo = saldo;
+        this.id = id;
     }
 
     public int getId() {

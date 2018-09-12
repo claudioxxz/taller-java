@@ -15,6 +15,7 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.BoxLayout;
+import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -36,11 +37,16 @@ public class VistaListaCuentas extends JFrame{
     private final JLabel lblLista;
     private final JButton btnDepositarDinero, btnRetirarDinero, btnCrearCueta;
     private final JPanel pnllista, pnlbotones;
+    private final Usuario usuario;
+    
+    private final DefaultListModel listModel;
     
     public VistaListaCuentas(Usuario usuario){
         super("Banco menu - Seleccionar cuenta");
         
-        listaCuentas = new JList<>();
+        this.usuario = usuario;
+        listModel = new DefaultListModel();
+        listaCuentas = new JList<>(listModel);
         lblLista = new JLabel("Lista de cuentas");
         btnCrearCueta = new JButton("Crear cuenta");
         btnRetirarDinero = new JButton("Retirar dinero");
@@ -54,7 +60,7 @@ public class VistaListaCuentas extends JFrame{
         listaCuentas.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         listaCuentas.setLayoutOrientation(JList.HORIZONTAL_WRAP);
         JScrollPane listScroller = new JScrollPane(listaCuentas);
-        listScroller.setPreferredSize(new Dimension(250, 80));
+        listScroller.setPreferredSize(new Dimension(250, 400));
         
         pnllista = new JPanel();
         pnllista.setLayout(new BoxLayout(pnllista, BoxLayout.Y_AXIS));
@@ -85,7 +91,10 @@ public class VistaListaCuentas extends JFrame{
     private final ActionListener accionCrearCuentaBancaria = new ActionListener() {
         @Override
         public void actionPerformed(ActionEvent e) {
-            VistaCrearCuentaBancaria vistaCrearCuenta = new VistaCrearCuentaBancaria();
+            VistaCrearCuentaBancaria vistaCrearCuenta = new VistaCrearCuentaBancaria(usuario);
+            vistaCrearCuenta.setCuentaCreadaListener((Cuenta cuenta) -> {
+                listModel.addElement(cuenta);
+            });
         }
     };
     
@@ -108,9 +117,9 @@ public class VistaListaCuentas extends JFrame{
         try {
             CuentaDAO cuentaDao = new CuentaDAO();
             List<Cuenta> cuentas = cuentaDao.obtenerCuentasPorUsuario(usuario.getId());
-            listaCuentas.setListData(cuentas.toArray());
-            
-            
+            for(Cuenta cuenta: cuentas){
+                listModel.addElement(cuenta);
+            }
         } catch (SQLException ex) {
             Logger.getLogger(VistaListaCuentas.class.getName()).log(Level.SEVERE, null, ex);
         }  
