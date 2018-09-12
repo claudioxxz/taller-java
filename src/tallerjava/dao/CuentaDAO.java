@@ -19,31 +19,28 @@ import tallerjava.modelo.Cuenta;
  */
 public class CuentaDAO {
     
-    Conexion con;
+    Statement st;
     
-    public CuentaDAO(){
-        con = Conexion.getSingletonInstance();     
+    public CuentaDAO() throws SQLException{
+        Conexion con = Conexion.getSingletonInstance();
+        Connection cn = con.getConnection();
+        st = cn.createStatement();
     }
     
     public int insertarCuenta(Cuenta cuenta) throws SQLException{
-        Connection cn = con.getConnection();
-        Statement st = cn.createStatement();
-        int filas = st.executeUpdate("Insert into cuenta values ('" + cuenta.getTipo() + "', " + cuenta.getSaldo() + ")");
-        cn.close();
+        int filas = 0;
+        filas = st.executeUpdate("Insert into cuenta values ('" + cuenta.getTipo() + "', " + cuenta.getSaldo() + ")");
         return filas;
     }
     
     public int editarCuenta(Cuenta cuenta) throws SQLException{
-        Connection cn = con.getConnection();
-        Statement st = cn.createStatement();
-        int filas = st.executeUpdate("update cuenta set tipo='" + cuenta.getTipo() + "', saldo=" + cuenta.getSaldo() + " where id=" +cuenta.getId() );
-        cn.close();
+        int filas = 0;
+        filas = st.executeUpdate("update cuenta set tipo='" + cuenta.getTipo() + "', saldo=" + cuenta.getSaldo() + " where id=" +cuenta.getId() );
         return filas;
     }
     
     public List<Cuenta> obtenerCuentas() throws SQLException{
-        Connection cn = con.getConnection();
-        Statement st = cn.createStatement();
+        
         ArrayList<Cuenta> listaCuenta = new ArrayList<>();
         ResultSet rs;
         rs = st.executeQuery("Select * from cuenta");
@@ -51,26 +48,20 @@ public class CuentaDAO {
             final Cuenta cuenta = new Cuenta(rs.getInt(1), rs.getString(2), rs.getDouble(3));
             listaCuenta.add(cuenta);
         }
-        cn.close();
         return listaCuenta;
     }
     
-    public Cuenta obtenerCuentaPorId(int id) throws SQLException{
-        Connection cn = con.getConnection();
-        Statement st = cn.createStatement();
+    public Cuenta obtenerCuentaPorId(int id) throws SQLException{        
         ResultSet rs;
         rs = st.executeQuery("Select * from cuenta where id=" + id);
         rs.next();
         Cuenta cuenta = new Cuenta(rs.getInt(1), rs.getString(2), rs.getDouble(3));
-        cn.close();
         return cuenta;
     }
     
     public int borrarCuenta(int id) throws SQLException{
-        Connection cn = con.getConnection();
-        Statement st = cn.createStatement();
-        int filas = st.executeUpdate("delete cuenta where id=" + id);
-        cn.close();
+        int filas = 0;
+        filas = st.executeUpdate("delete cuenta where id=" + id);
         return filas;
     }
 }
