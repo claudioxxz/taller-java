@@ -12,13 +12,23 @@ package tallerjava.modelo;
 public class UsuarioDetalle {
     
     private String nombre, apellido, email;
-
-    public UsuarioDetalle(String nombre, String apellido, String email) {
+    private int id;
+    
+    public UsuarioDetalle(int id, String nombre, String apellido, String email) {
         this.nombre = nombre;
         this.apellido = apellido;
         this.email = email;
+        this.id = id;
+    }
+    
+    public int getId() {
+        return id;
     }
 
+    public void setId(int id) {
+        this.id = id;
+    }
+    
     public String getNombre() {
         return nombre;
     }
