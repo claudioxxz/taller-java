@@ -10,12 +10,21 @@ package tallerjava.modelo;
  * @author Javier Ortiz
  */
 public class Cuenta {
+    private int id;
     private String tipo;
     private double saldo;
 
     public Cuenta(String tipo, double saldo) {
         this.tipo = tipo;
         this.saldo = saldo;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getTipo() {
