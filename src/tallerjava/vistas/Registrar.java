@@ -49,7 +49,7 @@ public class Registrar extends JDialog implements ActionListener{
         setGridLayout();
         btnCrearUsuario.addActionListener(this);
         btnCancelar.addActionListener(this);
-        setDefaultCloseOperation(JDialog.HIDE_ON_CLOSE);
+        setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
         pack();
         setSize(600, 400);
         setVisible(true);

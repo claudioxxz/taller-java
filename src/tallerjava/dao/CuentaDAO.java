@@ -27,8 +27,15 @@ public class CuentaDAO {
         st = cn.createStatement();
     }
     
-    public boolean insertarCuenta(Cuenta cuenta) throws SQLException{
-        int filas = st.executeUpdate("Insert into cuenta (tipo, saldo) values ('" + cuenta.getTipo() + "', " + cuenta.getSaldo() + ")");
+     public int idUltimaInsercion() throws SQLException{
+        ResultSet rs = st.executeQuery("Select Last_Insert_ID()");
+        rs.next();
+        int id = rs.getInt(1);
+        return id;
+    }
+    
+    public boolean insertarCuenta(int usuarioId, Cuenta cuenta) throws SQLException{
+        int filas = st.executeUpdate("Insert into cuenta (usuario_id, tipo, saldo) values ("+usuarioId+", '" + cuenta.getTipo() + "', " + cuenta.getSaldo() + ")");
         return filas>0;
     }
     
@@ -51,7 +58,7 @@ public class CuentaDAO {
     
     public List<Cuenta> obtenerCuentasPorUsuario(int usuarioId) throws SQLException{
         ArrayList<Cuenta> listaCuenta = new ArrayList<>();
-        ResultSet rs = st.executeQuery("Select * from cuenta where usuario_id ="+usuarioId);
+        ResultSet rs = st.executeQuery("Select id, tipo, saldo from cuenta where usuario_id ="+usuarioId);
         while(rs.next()){
             final Cuenta cuenta = new Cuenta(rs.getInt(1), rs.getString(2), rs.getDouble(3));
             listaCuenta.add(cuenta);
@@ -61,7 +68,7 @@ public class CuentaDAO {
     
     public Cuenta obtenerCuentaPorId(int id) throws SQLException{        
         ResultSet rs;
-        rs = st.executeQuery("Select * from cuenta where id=" + id);
+        rs = st.executeQuery("Select id, tipo, saldo from cuenta where id=" + id);
         rs.next();
         Cuenta cuenta = new Cuenta(rs.getInt(1), rs.getString(2), rs.getDouble(3));
         return cuenta;
