@@ -19,7 +19,7 @@ import tallerjava.modelo.Cuenta;
  */
 public class CuentaDAO {
     
-    Statement st;
+    private final Statement st;
     
     public CuentaDAO() throws SQLException{
         Conexion con = Conexion.getSingletonInstance();
