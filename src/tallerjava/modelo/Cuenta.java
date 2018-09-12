@@ -49,12 +49,12 @@ public class Cuenta {
         this.saldo = saldo;
     }
     
-    public double depositar(double deposito, double saldoActual){
-        return deposito + saldoActual;
+    public double depositar(double deposito){
+        return deposito + this.saldo;
     }
     
-    public double retirar(double retiro, double saldoActual){
-        return saldoActual - retiro;
+    public double retirar(double retiro){
+        return this.saldo - retiro;
     }
 
     @Override

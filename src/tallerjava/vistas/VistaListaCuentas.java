@@ -106,8 +106,7 @@ public class VistaListaCuentas extends JFrame{
             
             try{
                 double input = Double.parseDouble(JOptionPane.showInputDialog("Dinero a retirar"));
-                double saldoActual = cuenta.getSaldo();
-                cuenta.setSaldo(cuenta.retirar(input, saldoActual));
+                cuenta.setSaldo(cuenta.retirar(input));
                 CuentaDAO cuentaDao = new CuentaDAO();
                 boolean respuesta = cuentaDao.transaccion(cuenta);
                 if(respuesta){
@@ -132,8 +131,7 @@ public class VistaListaCuentas extends JFrame{
             
             try{
                 double input = Double.parseDouble(JOptionPane.showInputDialog("Dinero a depositar"));
-                double saldoActual = cuenta.getSaldo();
-                cuenta.setSaldo(cuenta.depositar(input, saldoActual));
+                cuenta.setSaldo(cuenta.depositar(input));
                 CuentaDAO cuentaDao = new CuentaDAO();
                 boolean respuesta = cuentaDao.transaccion(cuenta);
                 if(respuesta){
