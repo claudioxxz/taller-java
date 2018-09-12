@@ -67,6 +67,12 @@ public class CuentaDAO {
         return cuenta;
     }
     
+    public boolean transaccion(Cuenta cuenta) throws SQLException{
+        int filas = 0;
+        filas = st.executeUpdate("update cuenta set saldo= " + cuenta.getSaldo() + " where id=" + cuenta.getId());
+        return filas>0;
+    }
+    
     public boolean borrarCuenta(int id) throws SQLException{
         int filas = st.executeUpdate("delete from cuenta where id=" + id);
         return filas>0;

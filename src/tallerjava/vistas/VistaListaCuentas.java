@@ -92,14 +92,51 @@ public class VistaListaCuentas extends JFrame{
     private final ActionListener accionRetirarDinero = new ActionListener() {
         @Override
         public void actionPerformed(ActionEvent e) {
-            String input = JOptionPane.showInputDialog("Dinero a retirar");
+            
+            Cuenta cuenta = (Cuenta)listaCuentas.getSelectedValue();
+            
+            try{
+                double input = Double.parseDouble(JOptionPane.showInputDialog("Dinero a retirar"));
+                double saldoActual = cuenta.getSaldo();
+                cuenta.setSaldo(cuenta.retirar(input, saldoActual));
+                CuentaDAO cuentaDao = new CuentaDAO();
+                boolean respuesta = cuentaDao.transaccion(cuenta);
+                if(respuesta){
+                    JOptionPane.showMessageDialog(null, "retiro hecho correctamente");
+                }
+            }catch(NumberFormatException nfe){
+                JOptionPane.showMessageDialog(null, "Ingrese un Numero");
+                System.out.println(nfe.getMessage());
+            }catch(SQLException error){
+                JOptionPane.showMessageDialog(null, "Error al hacer retiro");
+                System.out.println(error.getMessage());
+            }
+            
         }
     };
     
     private final ActionListener accionDepositarDinero = new ActionListener() {
         @Override
         public void actionPerformed(ActionEvent e) {
-            String input = JOptionPane.showInputDialog("Dinero a depositar");
+            
+            Cuenta cuenta = (Cuenta)listaCuentas.getSelectedValue();
+            
+            try{
+                double input = Double.parseDouble(JOptionPane.showInputDialog("Dinero a depositar"));
+                double saldoActual = cuenta.getSaldo();
+                cuenta.setSaldo(cuenta.depositar(input, saldoActual));
+                CuentaDAO cuentaDao = new CuentaDAO();
+                boolean respuesta = cuentaDao.transaccion(cuenta);
+                if(respuesta){
+                    JOptionPane.showMessageDialog(null, "deposito hecho correctamente");
+                }
+            }catch(NumberFormatException nfe){
+                JOptionPane.showMessageDialog(null, "Ingrese un Numero");
+                System.out.println(nfe.getMessage());
+            }catch(SQLException error){
+                JOptionPane.showMessageDialog(null, "Error al ahcer deposito");
+                System.out.println(error.getMessage());
+            }
         }
     };
     

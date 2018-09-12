@@ -22,6 +22,7 @@ public class Cuenta {
     public Cuenta(int id, String tipo, double saldo) {
         this.tipo = tipo;
         this.saldo = saldo;
+        this.id = id;
     }
 
     public int getId() {
@@ -46,6 +47,14 @@ public class Cuenta {
 
     public void setSaldo(double saldo) {
         this.saldo = saldo;
+    }
+    
+    public double depositar(double deposito, double saldoActual){
+        return deposito + saldoActual;
+    }
+    
+    public double retirar(double retiro, double saldoActual){
+        return saldoActual - retiro;
     }
 
     @Override
