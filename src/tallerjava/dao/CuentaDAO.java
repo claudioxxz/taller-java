@@ -27,20 +27,17 @@ public class CuentaDAO {
         st = cn.createStatement();
     }
     
-    public int insertarCuenta(Cuenta cuenta) throws SQLException{
-        int filas = 0;
-        filas = st.executeUpdate("Insert into cuenta values ('" + cuenta.getTipo() + "', " + cuenta.getSaldo() + ")");
-        return filas;
+    public boolean insertarCuenta(Cuenta cuenta) throws SQLException{
+        int filas = st.executeUpdate("Insert into cuenta (tipo, saldo) values ('" + cuenta.getTipo() + "', " + cuenta.getSaldo() + ")");
+        return filas>0;
     }
     
-    public int editarCuenta(Cuenta cuenta) throws SQLException{
-        int filas = 0;
-        filas = st.executeUpdate("update cuenta set tipo='" + cuenta.getTipo() + "', saldo=" + cuenta.getSaldo() + " where id=" +cuenta.getId() );
-        return filas;
+    public boolean editarCuenta(Cuenta cuenta) throws SQLException{
+        int filas = st.executeUpdate("update cuenta set tipo='" + cuenta.getTipo() + "', saldo=" + cuenta.getSaldo() + " where id=" +cuenta.getId() );
+        return filas>0;
     }
     
     public List<Cuenta> obtenerCuentas() throws SQLException{
-        
         ArrayList<Cuenta> listaCuenta = new ArrayList<>();
         ResultSet rs;
         rs = st.executeQuery("Select * from cuenta");
@@ -59,9 +56,8 @@ public class CuentaDAO {
         return cuenta;
     }
     
-    public int borrarCuenta(int id) throws SQLException{
-        int filas = 0;
-        filas = st.executeUpdate("delete cuenta where id=" + id);
-        return filas;
+    public boolean borrarCuenta(int id) throws SQLException{
+        int filas = st.executeUpdate("delete from cuenta where id=" + id);
+        return filas>0;
     }
 }
