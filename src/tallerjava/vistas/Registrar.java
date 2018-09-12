@@ -11,6 +11,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.SQLException;
 import javax.swing.JButton;
+import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -26,7 +27,7 @@ import tallerjava.modelo.UsuarioDetalle;
  *
  * @author Javier Ortiz
  */
-public class Registrar extends JFrame implements ActionListener{
+public class Registrar extends JDialog implements ActionListener{
     
     private JLabel labelNombre, labelApellido, labelEmail, labelRut, labelContraseña, labelConfirmar;
     private JTextField textNombre, textApellido, textEmail, textRut;
@@ -39,7 +40,6 @@ public class Registrar extends JFrame implements ActionListener{
     + "[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$";
    
     public Registrar(){
-        super("Registrar");
         setJLabels();
         setJTextFields();
         setJPasswordField();
@@ -49,8 +49,12 @@ public class Registrar extends JFrame implements ActionListener{
         setGridLayout();
         btnCrearUsuario.addActionListener(this);
         btnCancelar.addActionListener(this);
+        setDefaultCloseOperation(JDialog.HIDE_ON_CLOSE);
+        pack();
         setSize(600, 400);
         setVisible(true);
+        setTitle("Registrar");
+        setModal(true);
     }
     
     
@@ -65,12 +69,12 @@ public class Registrar extends JFrame implements ActionListener{
                         try{
                             UsuarioDao db = new UsuarioDao();
                             boolean resultado = db.insertar(usuario);
-                            if(resultado == true){
+                            if(resultado){
                                 int id = db.idUltimaInsercion();
                                 UsuarioDetalle detalle = new UsuarioDetalle(id, textNombre.getText(), textApellido.getText(), textEmail.getText());
                                 UsuarioDetalleDao uddb = new UsuarioDetalleDao();
                                 resultado = uddb.insertar(detalle);
-                                if(resultado == true){
+                                if(resultado){
                                     JOptionPane.showMessageDialog(null, "Usuario creado correctamente");
                                     limpiar();
                                 }

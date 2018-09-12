@@ -105,7 +105,7 @@ public class VistaIngreso extends JFrame{
     private final ActionListener accionCrearCuenta = new ActionListener() {
         @Override
         public void actionPerformed(ActionEvent e) {
-            //Iniciar pantalla para crear cuenta
+            Registrar reg = new Registrar();
         }
     };
 }
