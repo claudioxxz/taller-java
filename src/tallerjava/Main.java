@@ -4,6 +4,8 @@
  * and open the template in the editor.
  */
 package tallerjava;
+import javax.swing.JFrame;
+import tallerjava.vistas.Registrar;
 
 /**
  *
@@ -15,6 +17,8 @@ public class Main {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
+        Registrar reg = new Registrar();
+        reg.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     }
     
 }

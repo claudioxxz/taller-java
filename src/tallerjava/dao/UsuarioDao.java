@@ -54,6 +54,13 @@ public class UsuarioDao {
         return listaUsuarios;
     }
     
+    public int idUltimaInsercion() throws SQLException{
+        ResultSet rs = st.executeQuery("Select Last_Insert_ID()");
+        rs.next();
+        int id = rs.getInt(1);
+        return id;
+    }
+    
     public Usuario obtener(int id) throws SQLException{
         String sql = String.format("SELECT id, rut, contraseña FROM usuario WHERE id= %s", id);
         ResultSet rs = st.executeQuery(sql);
