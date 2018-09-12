@@ -9,6 +9,8 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
 import tallerjava.modelo.Cuenta;
 
 /**
@@ -31,7 +33,7 @@ public class CuentaDAO {
         
     }
     
-    public int InsertarCuenta(Cuenta cuenta) throws SQLException{
+    public int insertarCuenta(Cuenta cuenta) throws SQLException{
         int filas = 0;
         try{
            filas = st.executeUpdate("Insert into cuenta values ('" + cuenta.getTipo() + "', " + cuenta.getSaldo() + ")");
@@ -41,7 +43,7 @@ public class CuentaDAO {
         return filas;
     }
     
-    public int EditarCuenta(Cuenta cuenta) throws SQLException{
+    public int editarCuenta(Cuenta cuenta) throws SQLException{
         int filas = 0;
         try{
             filas = st.executeUpdate("update cuenta set tipo='" + cuenta.getTipo() + "', saldo=" + cuenta.getSaldo() + " where id=" +cuenta.getId() );
@@ -51,27 +53,37 @@ public class CuentaDAO {
         return filas;
     }
     
-    public ResultSet ObtenerCuentas() throws SQLException{
-        ResultSet rs;
+    public List<Cuenta> obtenerCuentas() throws SQLException{
+        
+        ArrayList<Cuenta> listaCuenta = new ArrayList<>();
         try{
+            ResultSet rs;
             rs = st.executeQuery("Select * from cuenta");
+            while(rs.next()){
+                final Cuenta cuenta = new Cuenta(rs.getInt(1), rs.getString(2), rs.getDouble(3));
+                listaCuenta.add(cuenta);
+            }
         }catch(SQLException error){
             throw new SQLException(error.getMessage());
         }
-        return rs;
+        return listaCuenta;
     }
     
-    public ResultSet ObtenerCuentaPorId(int id) throws SQLException{
+    public Cuenta obtenerCuentaPorId(int id) throws SQLException{
+        
         ResultSet rs;
         try{
+            
             rs = st.executeQuery("Select * from cuenta where id=" + id);
         }catch(SQLException error){
             throw new SQLException(error.getMessage());
         }
-        return rs;
+        rs.next();
+        Cuenta cuenta = new Cuenta(rs.getInt(1), rs.getString(2), rs.getDouble(3));
+        return cuenta;
     }
     
-    public int BorrarCuenta(int id) throws SQLException{
+    public int borrarCuenta(int id) throws SQLException{
         int filas = 0;
         try{
             filas = st.executeUpdate("delete cuenta where id=" + id);
